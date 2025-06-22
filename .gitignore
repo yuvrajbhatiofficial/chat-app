@@ -1,0 +1,19 @@
+# Node.js
+node_modules/
+.env
+
+# Next.js build
+.next/
+out/
+
+# Logs
+logs/
+*.log
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Docker
+*.pid
