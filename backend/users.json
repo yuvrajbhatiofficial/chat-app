@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1750795851865,
+    "email": "yuvraj@example.com",
+    "password": "$2b$10$ngiF0s/fatwM6VBQ1LigmeFrwYbErmmQgUVWzabX0vLM95PUKbIDm"
+  },
+  {
+    "id": 1750797623711,
+    "username": "yuvraj.12",
+    "email": "yuvrajsinghbhati.290836@gmail.com",
+    "password": "$2b$10$NDsxqFcI5sLWcrCPlsPSTOK7v8qlzJjHfAB1uG66s4si7VCXjy9Oq"
+  },
+  {
+    "id": 1750798085684,
+    "email": "tarabhati.290836@gmail.com",
+    "password": "$2b$10$VMODpPwHVhUKVSypzXA1NOu3tLjgfF2zIIOGnCryl0Yz.v9v0XsDa"
+  },
+  {
+    "id": 1750975125459,
+    "username": "yuvraj",
+    "email": "yuvrajbhatiofficial@gmail.com",
+    "password": "$2b$10$C0AygouPIeV4976TBJgFVukLCKtQ4N7UYfm07FKK0.HpIDLjWQpYm"
+  },
+  {
+    "id": 1750976363566,
+    "username": "abhinav24",
+    "email": "abhinav@gmail.com",
+    "password": "$2b$10$G5GvbzTA6ivbmkW1P77zW.wcKSQF2C3fk1.JnMQmvNLpu81jDXaje"
+  }
+  
+]
