@@ -1,6 +1,6 @@
-const db = require("./db");
+const db = require("./db"); // users.db
 
-const initializeDB = () => {
+const initializeUsersDB = () => {
   db.serialize(() => {
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
@@ -13,4 +13,4 @@ const initializeDB = () => {
   });
 };
 
-module.exports = initializeDB;
+module.exports = initializeUsersDB;

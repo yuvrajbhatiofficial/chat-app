@@ -7,8 +7,11 @@ const authRoutes = require('./routes/auth');
 const authMiddleware = require('./middleware/auth');
 const { verifyToken } = require("./utils/jwt");
 const initDb = require('./initDB');
-
-
+const userRoutes = require('./routes/users');
+const chatRoutes = require("./routes/chat");
+const db = require('./db');
+const initializeChatsDB = require("./initChatDB");
+const chatsDb = require('./chatsDb');
 
 
 const app = express();
@@ -21,11 +24,19 @@ const io = new Server(server, {
 });
 
 initDb();
+initializeChatsDB();
 app.use(cors());
 app.use(express.json());
 
 // Auth routes
 app.use("/auth", authRoutes);
+
+//users routes 
+app.use("/users", userRoutes);
+
+// chat routes
+app.use("/chat", chatRoutes);
+
 
 // Test protected route
 app.get("/protected", authMiddleware, (req, res) => {
@@ -55,15 +66,44 @@ io.use((socket, next) => {
 });
 
 
-io.on("connection", (socket) => {
-  console.log("✅ Authenticated user connected:", socket.user.email);
+const onlineUsers = new Map();
 
-  socket.on("send_message", (data) => {
-    socket.broadcast.emit("receive_message", data);
+io.on("connection", (socket) => {
+  const user = socket.user;
+  console.log("✅ Authenticated user connected:", user.email);
+
+  onlineUsers.set(user.id, socket);
+
+  // 🔥 Updated: Save to DB + Send to receiver
+  socket.on("send_private_message", ({ toUserId, message }) => {
+    const targetSocket = onlineUsers.get(toUserId);
+
+    // 1. Insert into DB
+    chatsDb.run(
+      `INSERT INTO chats (sender_id, receiver_id, message) VALUES (?, ?, ?)`,
+      [user.id, toUserId, message],
+      (err) => {
+        if (err) {
+          console.error("❌ Error saving message to DB:", err);
+        } else {
+          console.log("💾 Message saved to chats DB.");
+        }
+      }
+    );
+
+    // 2. Emit to receiver if online
+    if (targetSocket) {
+      targetSocket.emit("receive_message", {
+        sender: user.username,
+        senderId: user.id,
+        message,
+      });
+    }
   });
 
   socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.user.email);
+    console.log("User disconnected:", user.email);
+    onlineUsers.delete(user.id);
   });
 });
 
@@ -71,4 +111,3 @@ const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
