@@ -143,7 +143,11 @@ export default function Home() {
         <div className="bg-white w-full max-w-2xl p-4 rounded shadow">
           <div className="h-64 overflow-y-auto border p-2 mb-4">
             {currentMessages.map((msg, i) => (
-              <div key={i} className="mb-1">
+              <div key={i} className={`px-4 py-2 rounded-lg text-sm w-fit m-2 max-w-xs ${
+                msg.startsWith("You:")
+                  ? "bg-blue-500 text-white ml-auto"
+                  : "bg-gray-100 text-gray-800"
+              }`}>
                 {msg}
               </div>
             ))}
