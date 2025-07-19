@@ -12,7 +12,7 @@ const chatRoutes = require("./routes/chat");
 const db = require('./db');
 const initializeChatsDB = require("./initChatDB");
 const chatsDb = require('./chatsDb');
-
+const searchRouter = require('./routes/search');
 
 const app = express();
 const server = http.createServer(app);
@@ -36,6 +36,9 @@ app.use("/users", userRoutes);
 
 // chat routes
 app.use("/chat", chatRoutes);
+
+//search routes
+app.use("/api/users", searchRouter);
 
 
 // Test protected route

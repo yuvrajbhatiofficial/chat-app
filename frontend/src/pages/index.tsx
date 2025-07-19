@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 import UserListSidebar from "@/components/UserListSidebar";
 import jwt_decode from "jwt-decode";
+import SearchUserList from "@/components/SearchUserList";
+
+
 
 let socket: Socket;
 
@@ -26,6 +29,10 @@ export default function Home() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const currentMessages = selectedUser ? messagesMap[selectedUser.id] || [] : [];
   const [userId, setUserId] = useState<number | null>(null);
+  const CurrentTime = new Date().toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
   
 
 
@@ -65,6 +72,10 @@ export default function Home() {
       socket.disconnect();
     };
   }, []);
+  const time = new Date().toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 
   const sendMessage = () => {
     if (!message.trim() || !selectedUser) return;
@@ -90,27 +101,23 @@ export default function Home() {
     socket.disconnect();
     router.push("/login");
   };
-
-  return (
-    <div className="flex h-screen">
-      <UserListSidebar
-  token={token}
-  onUserSelect={async (id, user) => {
-    if (!userId) return; // 🧠 Ensure JWT is decoded before using
-
+//userselect thing
+  const handleUserSelect = async (id: number, user: User) => {
+    if (!userId) return;
+  
     if (!selectedUser || selectedUser.id !== user.id) {
       setSelectedUser(user);
-
+  
       try {
         const res = await fetch(`http://localhost:5001/chat/history/${userId}/${user.id}`);
         const data = await res.json();
-
+  
         const formattedMessages = (data.messages || []).map((msg: any) => {
           return msg.sender_id === userId
             ? `You: ${msg.message}`
             : `${user.username}: ${msg.message}`;
         });
-
+  
         setMessagesMap((prev) => ({
           ...prev,
           [user.id]: formattedMessages,
@@ -119,7 +126,13 @@ export default function Home() {
         console.error("Failed to fetch chat history:", err);
       }
     }
-  }}
+  };
+
+  return (
+    <div className="flex h-screen">
+      <UserListSidebar
+  token={token}
+  onUserSelect={handleUserSelect}
 />
 
       {/* Main Chat Area */}
@@ -128,7 +141,7 @@ export default function Home() {
         <div className="flex justify-between items-center w-full max-w-2xl mb-4">
           <h1 className="text-2xl font-bold">
             {selectedUser
-              ? `Chat with ${selectedUser.username}`
+              ? ` ${selectedUser.username}`
               : `Select a user to chat`}
           </h1>
           <button
@@ -148,7 +161,7 @@ export default function Home() {
                   ? "bg-blue-500 text-white ml-auto"
                   : "bg-gray-100 text-gray-800"
               }`}>
-                {msg}
+                {msg} <div className="  text-xs ml-1 text-right m-0.5 ">({time})</div>
               </div>
             ))}
           </div>
@@ -177,6 +190,14 @@ export default function Home() {
             </button>
           </form>
         </div>
+      </div>
+      <div>
+      <main className="p-4">
+      <h1 className="text-2xl font-bold mb-4">User Search</h1>
+      <SearchUserList
+          onUserSelect={handleUserSelect}
+/>
+    </main>
       </div>
     </div>
   );
