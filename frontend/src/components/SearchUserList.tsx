@@ -59,7 +59,7 @@ export default function SearchUserList({ onUserSelect }: Props) {
         {results.map((user) => (
           <li
             key={user.id}
-            className="border-b py-2 cursor-pointer hover:bg-gray-100"
+            className="border-b py-2 cursor-pointer hover:text-black hover:bg-gray-100"
             onClick={() => handleUserClick(user)}
           >
             <strong>{user.username}</strong>

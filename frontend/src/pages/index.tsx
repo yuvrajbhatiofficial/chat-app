@@ -4,7 +4,7 @@ import { io, Socket } from "socket.io-client";
 import UserListSidebar from "@/components/UserListSidebar";
 import jwt_decode from "jwt-decode";
 import SearchUserList from "@/components/SearchUserList";
-
+import SideNavbar from "@/components/SideNavbar";
 
 
 let socket: Socket;
@@ -13,11 +13,11 @@ interface User {
   id: number;
   username: string;
 }
-interface DecodedToken {
-  id: number;
-  username: string;
-  email: string;
-}
+// interface DecodedToken {
+//   id: number;
+//   username: string;
+//   email: string;
+// }
 
 
 export default function Home() {
@@ -95,12 +95,7 @@ export default function Home() {
       setMessage("");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    socket.disconnect();
-    router.push("/login");
-  };
+  
 //userselect thing
   const handleUserSelect = async (id: number, user: User) => {
     if (!userId) return;
@@ -130,10 +125,7 @@ export default function Home() {
 
   return (
     <div className="flex h-screen">
-      <UserListSidebar
-  token={token}
-  onUserSelect={handleUserSelect}
-/>
+      <SideNavbar token={token} onUserSelect={handleUserSelect} />
 
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col items-center justify-start bg-gray-100 p-4">
@@ -144,12 +136,7 @@ export default function Home() {
               ? ` ${selectedUser.username}`
               : `Select a user to chat`}
           </h1>
-          <button
-            onClick={handleLogout}
-            className="text-red-600 border border-red-600 px-3 py-1 rounded hover:bg-red-100"
-          >
-            Logout
-          </button>
+          
         </div>
 
         {/* Chat box */}
@@ -190,14 +177,6 @@ export default function Home() {
             </button>
           </form>
         </div>
-      </div>
-      <div>
-      <main className="p-4">
-      <h1 className="text-2xl font-bold mb-4">User Search</h1>
-      <SearchUserList
-          onUserSelect={handleUserSelect}
-/>
-    </main>
       </div>
     </div>
   );
