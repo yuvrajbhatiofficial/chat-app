@@ -41,7 +41,7 @@ router.get("/", authMiddleware, (req, res) => {
           return res.status(500).json({ error: "Users DB error", details: err.message });
         }
 
-        console.log("Users you've chatted with:", userRows);
+        // console.log("Users you've chatted with:", userRows);
         res.json({ users: userRows });
       });
     }
