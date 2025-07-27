@@ -10,9 +10,11 @@ interface User {
 
 interface Props {
   onUserSelect: (chatId: number, user: any) => void;
+  collapsed: boolean;
 }
 
-export default function SearchUserList({ onUserSelect }: Props) {
+export default function SearchUserList({ onUserSelect ,collapsed }: Props) {
+  if (collapsed) return null;
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { FiMessageCircle, FiSearch, FiSettings } from 'react-icons/fi';
+import { FiMessageCircle, FiSearch, FiSettings, FiMenu } from 'react-icons/fi';
 import UserListSidebar from './UserListSidebar';
 import SearchUserList from './SearchUserList';
 import UserSetting from './UserSetting';
@@ -13,15 +13,27 @@ interface Props {
 
 export default function SideNavbar({ token, onUserSelect }: Props) {
   const [activeTab, setActiveTab] = useState<'chats' | 'search' | 'setting'>('chats');
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <div className="flex h-screen">
       {/* Vertical Icon Bar */}
-      <div className="w-16 bg-white text-black dark:bg-gray-900 dark:text-white flex flex-col items-center py-4 space-y-4">
+      <div
+        className={` transition-all duration-300 bg-white text-black dark:bg-gray-900 dark:text-white flex flex-col py-4 space-y-4`}
+      >
+       
+       {/* MenuBurger */}
+       <button  
+          onClick={() => setCollapsed(!collapsed)}
+          className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 `}
+        >
+          <FiMenu size={24} />
+        </button>
+
        {/* chats */}
         <button
-          onClick={() => setActiveTab('chats')}
-          className={`p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${
+          onClick={() => {setActiveTab('chats'),setCollapsed(!collapsed)}}
+          className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 ${
             activeTab === 'chats' ? 'bg-gray-100 dark:bg-gray-700' : ''
           }`}
         >
@@ -29,8 +41,8 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
         </button>
         {/* serach  */}
         <button
-          onClick={() => setActiveTab('search')}
-          className={`p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${
+          onClick={() => {setActiveTab('search'),setCollapsed(!collapsed)}}
+          className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 ${
             activeTab === 'search' ? 'bg-gray-100 dark:bg-gray-700' : ''
           }`}
         >
@@ -38,8 +50,8 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
         </button>
         {/* setting */}
         <button
-          onClick={() => setActiveTab('setting')}
-          className={`p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 ${
+          onClick={() => {setActiveTab('setting'),setCollapsed(!collapsed)}}
+          className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 ${
             activeTab === 'setting' ? 'bg-gray-100 dark:bg-gray-700' : ''
           }`}
         >
@@ -48,8 +60,9 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
       </div>
 
       {/* Right Sidebar */}
-      <div className="w-64 border-r bg-white dark:bg-gray-800 dark:text-white shadow flex flex-col">
-        {/* Topbar */}
+      {!collapsed && (
+        <div className="w-64 border-r bg-white dark:bg-gray-800 dark:text-white shadow flex flex-col">
+          {/* Topbar */}
         <div className="p-4 border-b text-xl font-bold bg-gray-100 dark:bg-gray-700 dark:border-gray-600">
           {activeTab === 'chats' && 'Chats'}
           {activeTab === 'search' && 'Search'}
@@ -59,14 +72,15 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
           {activeTab === 'chats' && (
-            <UserListSidebar token={token} onUserSelect={onUserSelect} />
+            <UserListSidebar token={token} onUserSelect={onUserSelect} collapsed={collapsed}/>
           )}
           {activeTab === 'search' && (
-            <SearchUserList onUserSelect={onUserSelect} />
+            <SearchUserList onUserSelect={onUserSelect} collapsed={collapsed} />
           )}
-          {activeTab === 'setting' && (<UserSetting/>)}
+          {activeTab === 'setting' && (<UserSetting collapsed={collapsed}/>)}
         </div>
       </div>
+        )}
     </div>
   );
 }

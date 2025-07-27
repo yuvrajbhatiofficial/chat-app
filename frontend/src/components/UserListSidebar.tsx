@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 interface Props {
   token: string | null; // The user's auth token
   onUserSelect: (chatId: number, user: any) => void; // Callback to notify parent when a user is selected
+  collapsed: boolean;
 }
 
-export default function UserListSidebar({ token, onUserSelect }: Props) {
+export default function UserListSidebar({ token, onUserSelect, collapsed }: Props) {
+  if (collapsed) return null;
   const [connectedUsers, setConnectedUsers] = useState<any[]>([]); // List of users with active chats
 
   useEffect(() => {
@@ -31,7 +33,11 @@ export default function UserListSidebar({ token, onUserSelect }: Props) {
   
 
   return (
-    <div className="w-64 border-r h-full overflow-y-auto bg-white dark:bg-gray-800 dark:text-white shadow">
+    <div
+    className={`transition-all duration-300 ${
+      collapsed ? 'hidden' : 'w-64'
+    } border-r h-full overflow-y-auto bg-white dark:bg-gray-800 dark:text-white shadow`}
+  >
 
       <h2 className="text-xl font-semibold p-4 border-b">Users</h2>
       <ul>

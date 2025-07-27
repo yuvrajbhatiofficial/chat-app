@@ -4,7 +4,13 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import {io} from 'socket.io-client'
 
-export default function UserSetting() {
+interface Props {
+  collapsed: boolean;
+}
+
+export default function UserSetting({ collapsed }: Props) {
+  
+    if (collapsed) return null;
     const router = useRouter();
 
     const handleLogout = () => {
