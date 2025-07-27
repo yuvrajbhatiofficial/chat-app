@@ -24,8 +24,8 @@ export default function Register() {
 
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white p-6 rounded shadow w-full max-w-sm">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-700 p-4">
+      <div className="bg-white dark:bg-gray-800 p-6 rounded shadow w-full max-w-sm">
         <h1 className="text-xl font-bold mb-4">Register</h1>
         <input
           type="username"

@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 import UserListSidebar from "@/components/UserListSidebar";
 import jwt_decode from "jwt-decode";
 import SearchUserList from "@/components/SearchUserList";
 import SideNavbar from "@/components/SideNavbar";
+import { FiSend } from "react-icons/fi";
 
 
 let socket: Socket;
@@ -29,14 +30,34 @@ export default function Home() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const currentMessages = selectedUser ? messagesMap[selectedUser.id] || [] : [];
   const [userId, setUserId] = useState<number | null>(null);
+  const [scrollToBottom,setScrollToBottom] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const CurrentTime = new Date().toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
   });
   
-
-
+// auto scroll feature for chats:----->
+const scrollToBottomFn = (smooth = true) => {
+  const container = document.getElementById('chat-container');
+  if (container) {
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior: smooth ? 'smooth' : 'auto',  
+    });
+  }
+};
+  
   useEffect(() => {
+    if (scrollToBottom) {
+      scrollToBottomFn(true); // ✅ smooth scroll
+      setScrollToBottom(false);
+    }
+  }, [currentMessages, scrollToBottom]);
+  
+// chat history recover----->
+  useEffect(() => {
+    
     const savedToken = localStorage.getItem("token");
     const savedUsername = localStorage.getItem("username");
     if (!savedToken) {
@@ -64,6 +85,7 @@ export default function Home() {
         ...prev,
         [fromId]: [...(prev[fromId] || []), `${data.sender}: ${data.message}`],
       }));
+      setScrollToBottom(true);
     });
     
     
@@ -93,6 +115,7 @@ export default function Home() {
         ],
       }));
       setMessage("");
+      setScrollToBottom(true);
   };
 
   
@@ -117,6 +140,7 @@ export default function Home() {
           ...prev,
           [user.id]: formattedMessages,
         }));
+        setTimeout(() => scrollToBottomFn(false), 0); 
       } catch (err) {
         console.error("Failed to fetch chat history:", err);
       }
@@ -128,7 +152,7 @@ export default function Home() {
       <SideNavbar token={token} onUserSelect={handleUserSelect} />
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col items-center justify-start bg-gray-100 p-4">
+      <div className="flex-1 flex flex-col items-center justify-start dark:bg-gray-800 bg-gray-100 p-4">
         {/* Top bar */}
         <div className="flex justify-between items-center w-full max-w-2xl mb-4">
           <h1 className="text-2xl font-bold">
@@ -140,29 +164,32 @@ export default function Home() {
         </div>
 
         {/* Chat box */}
-        <div className="bg-white w-full max-w-2xl p-4 rounded shadow">
-          <div className="h-64 overflow-y-auto border p-2 mb-4">
+        <div  className="bg-white dark:bg-slate-700 w-full max-w-2xl p-4 rounded shadow">
+          <div id="chat-container" className="h-64 overflow-y-auto  p-2 mb-4">
             {currentMessages.map((msg, i) => (
               <div key={i} className={`px-4 py-2 rounded-lg text-sm w-fit m-2 max-w-xs ${
                 msg.startsWith("You:")
                   ? "bg-blue-500 text-white ml-auto"
                   : "bg-gray-100 text-gray-800"
               }`}>
-                {msg} <div className="  text-xs ml-1 text-right m-0.5 ">({time})</div>
+                {msg} <div className="  text-[9px] ml-1 opacity-45 text-right m-0.5 ">({time})</div>
+                <div ref={messagesEndRef} />
               </div>
             ))}
+             <div ref={messagesEndRef} />
           </div>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               sendMessage();
             }}
+            className="flex"
           >
             <input
               type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="border w-full p-2 mb-2"
+              className=" dark:bg-gray-600 bg-gray-100 w-full p-2 mb-2"
               placeholder={
                 selectedUser ? "Type your message..." : "Select a user first..."
               }
@@ -170,10 +197,10 @@ export default function Home() {
             />
             <button
               type="submit"
-              className="bg-blue-600 text-white w-full py-2 rounded hover:bg-blue-700"
+              className="bg-blue-600 text-white p-2 mb-2 ml-2 px-6 py-2 rounded-full hover:bg-blue-700"
               disabled={!selectedUser}
             >
-              Send
+              <FiSend size={20}/>
             </button>
           </form>
         </div>
