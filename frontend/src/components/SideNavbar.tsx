@@ -32,7 +32,7 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
 
        {/* chats */}
         <button
-          onClick={() => {setActiveTab('chats'),setCollapsed(!collapsed)}}
+          onClick={() => {setActiveTab('chats'),setCollapsed(false)}}
           className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 ${
             activeTab === 'chats' ? 'bg-gray-100 dark:bg-gray-700' : ''
           }`}
@@ -41,7 +41,7 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
         </button>
         {/* serach  */}
         <button
-          onClick={() => {setActiveTab('search'),setCollapsed(!collapsed)}}
+          onClick={() => {setActiveTab('search'),setCollapsed(false)}}
           className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 ${
             activeTab === 'search' ? 'bg-gray-100 dark:bg-gray-700' : ''
           }`}
@@ -50,7 +50,7 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
         </button>
         {/* setting */}
         <button
-          onClick={() => {setActiveTab('setting'),setCollapsed(!collapsed)}}
+          onClick={() => {setActiveTab('setting'),setCollapsed(false)}}
           className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 ${
             activeTab === 'setting' ? 'bg-gray-100 dark:bg-gray-700' : ''
           }`}
