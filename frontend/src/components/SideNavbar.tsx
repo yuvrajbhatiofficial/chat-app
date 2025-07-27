@@ -19,7 +19,7 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
     <div className="flex h-screen">
       {/* Vertical Icon Bar */}
       <div
-        className={` transition-all duration-300 bg-white text-black dark:bg-gray-900 dark:text-white flex flex-col py-4 space-y-4`}
+        className={` transition-all duration-300 bg-white text-black dark:bg-gray-900 dark:text-white flex flex-col p-2 py-4 space-y-4`}
       >
        
        {/* MenuBurger */}
