@@ -147,64 +147,81 @@ const scrollToBottomFn = (smooth = true) => {
     }
   };
 
+
+
+
+
+
+
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-hidden">
       <SideNavbar token={token} onUserSelect={handleUserSelect} />
-
+  
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col items-center justify-start dark:bg-gray-800 bg-gray-100 p-4">
+      <div className="flex-1 flex flex-col dark:bg-gray-800 bg-gray-100">
         {/* Top bar */}
-        <div className="flex justify-between items-center w-full max-w-2xl mb-4">
+        <div className="flex justify-between items-center dark:bg-gray-700 bg-white w-full p-3.5 shadow z-10">
           <h1 className="text-2xl font-bold">
-            {selectedUser
-              ? ` ${selectedUser.username}`
-              : `Select a user to chat`}
+            {selectedUser ? `${selectedUser.username}` : "Select a user to chat"}
           </h1>
-          
         </div>
-
-        {/* Chat box */}
-        <div  className="bg-white dark:bg-slate-700 w-full max-w-2xl p-4 rounded shadow">
-          <div id="chat-container" className="h-64 overflow-y-auto  p-2 mb-4">
-            {currentMessages.map((msg, i) => (
-              <div key={i} className={`px-4 py-2 rounded-lg text-sm w-fit m-2 max-w-xs ${
-                msg.startsWith("You:")
-                  ? "bg-blue-500 text-white ml-auto"
-                  : "bg-gray-100 text-gray-800"
-              }`}>
-                {msg} <div className="  text-[9px] ml-1 opacity-45 text-right m-0.5 ">({time})</div>
-                <div ref={messagesEndRef} />
-              </div>
-            ))}
-             <div ref={messagesEndRef} />
-          </div>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              sendMessage();
-            }}
-            className="flex"
-          >
-            <input
-              type="text"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className=" dark:bg-gray-600 bg-gray-100 w-full p-2 mb-2"
-              placeholder={
-                selectedUser ? "Type your message..." : "Select a user first..."
-              }
-              disabled={!selectedUser}
-            />
-            <button
-              type="submit"
-              className="bg-blue-600 text-white p-2 mb-2 ml-2 px-6 py-2 rounded-full hover:bg-blue-700"
-              disabled={!selectedUser}
+  
+        {/* Chat content area */}
+        <div className="flex-1 flex flex-col p-4 overflow-hidden">
+          <div className="flex flex-col bg-white dark:bg-slate-700 rounded shadow h-full">
+            {/* Scrollable messages */}
+            <div
+              id="chat-container"
+              className="flex-1 overflow-y-auto scroll-smooth p-2 space-y-2"
             >
-              <FiSend size={20}/>
-            </button>
-          </form>
+              {currentMessages.map((msg, i) => (
+                <div
+                  key={i}
+                  className={`px-4 py-2 rounded-lg text-sm w-fit max-w-xs break-words ${
+                    msg.startsWith("You:")
+                      ? "bg-blue-500 text-white ml-auto"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {msg}
+                  <div className="text-[9px] ml-1 opacity-45 text-right mt-1">
+                    ({time})
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+  
+            {/* Input box fixed at bottom */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                sendMessage();
+              }}
+              className="flex items-center gap-2 p-2 "
+            >
+              <input
+                type="text"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="flex-1 dark:bg-gray-600 bg-gray-100 p-2 rounded"
+                placeholder={
+                  selectedUser ? "Type your message..." : "Select a user first..."
+                }
+                disabled={!selectedUser}
+              />
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 disabled:opacity-50"
+                disabled={!selectedUser}
+              >
+                <FiSend size={20} />
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   );
+  
 }
