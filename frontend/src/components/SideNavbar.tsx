@@ -61,16 +61,16 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
 
       {/* Right Sidebar */}
       {!collapsed && (
-        <div className="w-64 border-r bg-white dark:bg-gray-800 dark:text-white shadow flex flex-col">
+        <div className="w-64  bg-white dark:bg-gray-800 dark:text-white shadow  flex flex-col">
           {/* Topbar */}
-        <div className="p-4 border-b text-xl font-bold bg-gray-100 dark:bg-gray-700 dark:border-gray-600">
+        <div className="p-4    text-xl font-bold bg-white border-r border-b-2 border-gray-100  dark:bg-gray-700 dark:border-gray-600">
           {activeTab === 'chats' && 'Chats'}
           {activeTab === 'search' && 'Search'}
           {activeTab === 'setting' && 'Settings'}
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto border-r dark:border-gray-600 border-gray-100">
           {activeTab === 'chats' && (
             <UserListSidebar token={token} onUserSelect={onUserSelect} collapsed={collapsed}/>
           )}

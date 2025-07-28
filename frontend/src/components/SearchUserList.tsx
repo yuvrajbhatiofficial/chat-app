@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import axios from 'axios';
+import { FiSearch } from 'react-icons/fi';
 
 interface User {
   id: number;
@@ -26,7 +27,7 @@ export default function SearchUserList({ onUserSelect ,collapsed }: Props) {
       const res = await axios.get(`http://localhost:5001/api/users/search?q=${query}`);
       setResults(res.data);
     } catch (error) {
-      console.error("Search error:", error);
+      // console.error("Search error:", error);
     } finally {
       setLoading(false);
     }
@@ -43,7 +44,7 @@ export default function SearchUserList({ onUserSelect ,collapsed }: Props) {
         <input
           type="text"
           placeholder="Search by email or username"
-          className="border p-2 rounded w-full"
+          className="shadow p-2 rounded w-full"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
@@ -51,7 +52,7 @@ export default function SearchUserList({ onUserSelect ,collapsed }: Props) {
           type="submit"
           className="mt-2 bg-blue-500 text-white px-4 py-2 rounded"
         >
-          Search
+          <FiSearch/>
         </button>
       </form>
 
@@ -61,7 +62,7 @@ export default function SearchUserList({ onUserSelect ,collapsed }: Props) {
         {results.map((user) => (
           <li
             key={user.id}
-            className="border-b py-2 cursor-pointer hover:text-black hover:bg-gray-100"
+            className="border-b border-gray-100 text-lg py-2 cursor-pointer hover:text-black hover:bg-gray-100"
             onClick={() => handleUserClick(user)}
           >
             <strong>{user.username}</strong>

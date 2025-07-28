@@ -21,7 +21,7 @@ export default function UserSetting({ collapsed }: Props) {
   };
   return (
     <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">Settings</h2>
+      {/* <h2 className="text-xl font-semibold mb-4">Settings</h2> */}
       <div className="space-y-4">
       <button
           onClick={handleLogout}

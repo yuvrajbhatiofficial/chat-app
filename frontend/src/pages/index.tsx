@@ -158,17 +158,20 @@ const scrollToBottomFn = (smooth = true) => {
       <SideNavbar token={token} onUserSelect={handleUserSelect} />
   
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col dark:bg-gray-800 bg-gray-100">
+      <div className="flex-1 flex flex-col bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+
+
         {/* Top bar */}
-        <div className="flex justify-between items-center dark:bg-gray-700 bg-white w-full p-3.5 shadow z-10">
+        <div className="flex justify-between items-center dark:bg-gray-700 bg-white w-full p-3.5 border-b dark:border-gray-600 border-gray-100 z-10">
           <h1 className="text-2xl font-bold">
             {selectedUser ? `${selectedUser.username}` : "Select a user to chat"}
           </h1>
         </div>
   
         {/* Chat content area */}
-        <div className="flex-1 flex flex-col p-4 overflow-hidden">
-          <div className="flex flex-col bg-white dark:bg-slate-700 rounded shadow h-full">
+        <div className="flex-1 flex flex-col p-4  overflow-hidden">
+        <div className="flex flex-col h-full rounded-2xl border border-white/20 bg-white/10 dark:bg-slate-700/20 backdrop-blur-md shadow-lg">
+
             {/* Scrollable messages */}
             <div
               id="chat-container"
@@ -176,18 +179,18 @@ const scrollToBottomFn = (smooth = true) => {
             >
               {currentMessages.map((msg, i) => (
                 <div
-                  key={i}
-                  className={`px-4 py-2 rounded-lg text-sm w-fit max-w-xs break-words ${
-                    msg.startsWith("You:")
-                      ? "bg-blue-500 text-white ml-auto"
-                      : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  {msg}
-                  <div className="text-[9px] ml-1 opacity-45 text-right mt-1">
-                    ({time})
-                  </div>
+                key={i}
+                className={`px-4 py-2 rounded-xl text-base w-fit max-w-xs break-words backdrop-blur-sm ${
+                  msg.startsWith("You:")
+                    ? "bg-blue-500/80 text-white ml-auto"
+                    : "bg-gray-200/50 text-gray-900 dark:text-white"
+                }`}
+              >
+                {msg}
+                <div className="text-[9px] ml-1 opacity-45 text-right mt-1">
+                  ({time})
                 </div>
+              </div>
               ))}
               <div ref={messagesEndRef} />
             </div>

@@ -36,16 +36,16 @@ export default function UserListSidebar({ token, onUserSelect, collapsed }: Prop
     <div
     className={`transition-all duration-300 ${
       collapsed ? 'hidden' : 'w-64'
-    } border-r h-full overflow-y-auto bg-white dark:bg-gray-800 dark:text-white shadow`}
+    }  h-full overflow-y-auto bg-white dark:bg-gray-800 dark:text-white shadow`}
   >
 
-      <h2 className="text-xl font-semibold p-4 border-b">Users</h2>
+      {/* <h2 className="text-xl font-semibold p-4  border-t-2 border-gray-100 ">Users</h2> */}
       <ul>
         {connectedUsers.map((user) => (
           <li
             key={user.id}
             onClick={() => onUserSelect(user.id, user)}
-            className="cursor-pointer hover:bg-gray-100 hover:text-black px-4 py-2 border-b"
+            className="cursor-pointer text-xl hover:bg-gray-100 hover:text-black px-4 py-4 border-b border-gray-200 dark:border-gray-900"
           >
             {user.username}
           </li>
