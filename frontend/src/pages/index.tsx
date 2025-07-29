@@ -170,7 +170,7 @@ const scrollToBottomFn = (smooth = true) => {
   
         {/* Chat content area */}
         <div className="flex-1 flex flex-col p-4  overflow-hidden">
-        <div className="flex flex-col h-full rounded-2xl border border-white/20 bg-white/10 dark:bg-slate-700/20 backdrop-blur-md shadow-lg">
+        <div className="flex flex-col h-full rounded-2xl  backdrop-blur-md">
 
             {/* Scrollable messages */}
             <div
@@ -182,8 +182,8 @@ const scrollToBottomFn = (smooth = true) => {
                 key={i}
                 className={`px-4 py-2 rounded-xl text-base w-fit max-w-xs break-words backdrop-blur-sm ${
                   msg.startsWith("You:")
-                    ? "bg-blue-500/80 text-white ml-auto"
-                    : "bg-gray-200/50 text-gray-900 dark:text-white"
+                    ? "bg-blue-500/80 text-white ml-auto  border    dark:bg-white/10 dark:border dark:border-white/30 "
+                    : "bg-gray-200/50 text-gray-900     border border-white  dark:text-white   dark:bg-slate-500/20 dark:border dark:border-white/10"
                 }`}
               >
                 {msg}
@@ -207,7 +207,7 @@ const scrollToBottomFn = (smooth = true) => {
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="flex-1 dark:bg-gray-600 bg-gray-100 p-2 rounded"
+                className="flex-1 dark:bg-gray-600 dark:border-0 border-gray-200 border-1  bg-gray-100 p-2 rounded"
                 placeholder={
                   selectedUser ? "Type your message..." : "Select a user first..."
                 }
