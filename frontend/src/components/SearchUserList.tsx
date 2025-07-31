@@ -20,11 +20,17 @@ export default function SearchUserList({ onUserSelect ,collapsed }: Props) {
   const [results, setResults] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
 
+
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL not set in environment variables.");
+  }
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:5001/api/users/search?q=${query}`);
+      const res = await axios.get(`${apiUrl}/api/users/search?q=${query}`);
       setResults(res.data);
     } catch (error) {
       // console.error("Search error:", error);

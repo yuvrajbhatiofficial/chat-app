@@ -8,17 +8,18 @@ import SideNavbar from "@/components/SideNavbar";
 import { FiSend, FiChevronLeft } from "react-icons/fi";
 
 
-let socket: Socket;
+
+
 
 interface User {
   id: number;
   username: string;
 }
-// interface DecodedToken {
-//   id: number;
-//   username: string;
-//   email: string;
-// }
+interface DecodedToken {
+  id: number;
+  username: string;
+  email: string;
+}
 
 
 export default function Home() {
@@ -37,7 +38,11 @@ export default function Home() {
     hour: '2-digit',
     minute: '2-digit',
   });
-  
+  const socketRef = useRef<Socket | null>(null);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL not set in environment variables.");
+  }
 // auto scroll feature for chats:----->
 const scrollToBottomFn = (smooth = true) => {
   const container = document.getElementById('chat-container');
@@ -70,17 +75,22 @@ const scrollToBottomFn = (smooth = true) => {
     setToken(savedToken);
     setUsername(savedUsername);
     
-    const decoded: any = jwt_decode(savedToken);
-    setUserId(decoded.id);
- 
+    try {
+      const decoded = jwt_decode<DecodedToken>(savedToken);
+      setUserId(decoded.id);
+    } catch (err) {
+      console.error("Invalid token");
+      router.push("/login");
+      return;
+    }
     
     
     
-    socket = io("http://localhost:5001", {
+    socketRef.current = io(apiUrl, {
       auth: { token: savedToken },
     });
 
-    socket.on("receive_message", (data) => {
+    socketRef.current.on("receive_message", (data) => {
       const fromId = data.senderId;
       setMessagesMap((prev) => ({
         ...prev,
@@ -92,7 +102,7 @@ const scrollToBottomFn = (smooth = true) => {
     
 
     return () => {
-      socket.disconnect();
+      socketRef.current?.disconnect();
     };
   }, []);
   const time = new Date().toLocaleTimeString([], {
@@ -101,8 +111,8 @@ const scrollToBottomFn = (smooth = true) => {
   });
 
   const sendMessage = () => {
-    if (!message.trim() || !selectedUser) return;
-    socket.emit("send_private_message", {
+    if  (!socketRef.current || !selectedUser || !message.trim()) return;
+    socketRef.current.emit("send_private_message", {
       toUserId: selectedUser.id,
       message,
     });
@@ -128,7 +138,7 @@ const scrollToBottomFn = (smooth = true) => {
       setSelectedUser(user);
   
       try {
-        const res = await fetch(`http://localhost:5001/chat/history/${userId}/${user.id}`);
+        const res = await fetch(`${apiUrl}/chat/history/${userId}/${user.id}`);
         const data = await res.json();
   
         const formattedMessages = (data.messages || []).map((msg: any) => {
@@ -151,9 +161,10 @@ const scrollToBottomFn = (smooth = true) => {
   // online status indicator
 
   useEffect(() => {
-    if (!token) return;
+    if (!socketRef.current) return;
+    const socket = socketRef.current;
   
-    socket.on("online_users", (userIds: number[]) => {
+    socketRef.current.on("online_users", (userIds: number[]) => {
       setOnlineUserIds(userIds);
     });
   

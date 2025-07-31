@@ -11,13 +11,19 @@ export default function UserListSidebar({ token, onUserSelect, collapsed ,online
   if (collapsed) return null;
   const [connectedUsers, setConnectedUsers] = useState<any[]>([]); // List of users with active chats
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+  if (!apiUrl) {
+    throw new Error("API URL not set in environment variables.");
+  }
+
+
   useEffect(() => {
     if (!token) return;
 
     // Fetch users from backend
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:5001/users", {
+        const res = await fetch(`${apiUrl}l/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
