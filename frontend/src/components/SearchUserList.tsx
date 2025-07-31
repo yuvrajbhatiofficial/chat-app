@@ -15,16 +15,18 @@ interface Props {
 }
 
 export default function SearchUserList({ onUserSelect ,collapsed }: Props) {
-  if (collapsed) return null;
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<User[]>([]);
   const [loading, setLoading] = useState(false);
-
-
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+
   if (!apiUrl) {
     throw new Error("API URL not set in environment variables.");
   }
+  if (collapsed) return null;
+
+
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +34,7 @@ export default function SearchUserList({ onUserSelect ,collapsed }: Props) {
     try {
       const res = await axios.get(`${apiUrl}/api/users/search?q=${query}`);
       setResults(res.data);
-    } catch (error) {
+    } catch {
       // console.error("Search error:", error);
     } finally {
       setLoading(false);

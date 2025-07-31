@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { login } from "@/lib/api";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
@@ -44,9 +45,9 @@ export default function Login() {
         </button>
         <p className="text-sm mt-2 text-center">
           Don’t have an account?{" "}
-          <a href="/register" className="text-green-600 underline">
+          <Link href="/register" className="text-green-600 underline">
             Register
-          </a>
+          </Link>
         </p>
       </div>
     </div>

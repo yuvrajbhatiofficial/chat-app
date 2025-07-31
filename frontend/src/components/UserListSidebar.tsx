@@ -1,17 +1,23 @@
 import { useEffect, useState } from "react";
 
+interface User {
+  id: number;
+  username: string;
+  email: string;
+}
+
 interface Props {
   token: string | null; // The user's auth token
-  onUserSelect: (chatId: number, user: any) => void; // Callback to notify parent when a user is selected
+  onUserSelect: (chatId: number, user: User) => void; // Callback to notify parent when a user is selected
   collapsed: boolean;
   onlineUserIds: number[];
 }
 
 export default function UserListSidebar({ token, onUserSelect, collapsed ,onlineUserIds}: Props) {
-  if (collapsed) return null;
-  const [connectedUsers, setConnectedUsers] = useState<any[]>([]); // List of users with active chats
-
+  const [connectedUsers, setConnectedUsers] = useState<User[]>([]); // List of users with active chats
+  
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   if (!apiUrl) {
     throw new Error("API URL not set in environment variables.");
   }
@@ -23,7 +29,7 @@ export default function UserListSidebar({ token, onUserSelect, collapsed ,online
     // Fetch users from backend
     const fetchUsers = async () => {
       try {
-        const res = await fetch(`${apiUrl}l/users`, {
+        const res = await fetch(`${apiUrl}/users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -36,8 +42,8 @@ export default function UserListSidebar({ token, onUserSelect, collapsed ,online
     };
 
     fetchUsers();
-  }, [token]);
-  
+  }, [token, apiUrl]);
+  if (collapsed) return null;
 
   return (
     <div

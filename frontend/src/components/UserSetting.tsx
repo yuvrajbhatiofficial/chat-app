@@ -9,9 +9,9 @@ interface Props {
 }
 
 export default function UserSetting({ collapsed }: Props) {
+  const router = useRouter();
   
     if (collapsed) return null;
-    const router = useRouter();
 
     const handleLogout = () => {
     localStorage.removeItem("token");

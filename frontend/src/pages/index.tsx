@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
 // import UserListSidebar from "@/components/UserListSidebar";
@@ -20,6 +20,15 @@ interface DecodedToken {
   username: string;
   email: string;
 }
+interface ChatMessage {
+  sender_id: number;
+  message: string;
+}
+interface IncomingSocketMessage {
+  senderId: number;
+  sender: string;
+  message: string;
+} 
 
 
 export default function Home() {
@@ -29,15 +38,17 @@ export default function Home() {
   const [message, setMessage] = useState("");
   const [messagesMap, setMessagesMap] = useState<{ [userId: number]: string[] }>({});
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const currentMessages = selectedUser ? messagesMap[selectedUser.id] || [] : [];
+  const currentMessages = useMemo(() => {
+    return selectedUser ? messagesMap[selectedUser.id] || [] : [];
+  }, [selectedUser, messagesMap]);
   const [userId, setUserId] = useState<number | null>(null);
   const [scrollToBottom,setScrollToBottom] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const [onlineUserIds, setOnlineUserIds] = useState<number[]>([]);
-  const CurrentTime = new Date().toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+  // const CurrentTime = new Date().toLocaleTimeString([], {
+  //   hour: '2-digit',
+  //   minute: '2-digit',
+  // });
   const socketRef = useRef<Socket | null>(null);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   if (!apiUrl) {
@@ -75,10 +86,11 @@ const scrollToBottomFn = (smooth = true) => {
     setToken(savedToken);
     setUsername(savedUsername);
     
+    
     try {
       const decoded = jwt_decode<DecodedToken>(savedToken);
       setUserId(decoded.id);
-    } catch (err) {
+    } catch  {
       console.error("Invalid token");
       router.push("/login");
       return;
@@ -90,7 +102,7 @@ const scrollToBottomFn = (smooth = true) => {
       auth: { token: savedToken },
     });
 
-    socketRef.current.on("receive_message", (data) => {
+    socketRef.current.on("receive_message", (data: IncomingSocketMessage) => {
       const fromId = data.senderId;
       setMessagesMap((prev) => ({
         ...prev,
@@ -104,7 +116,7 @@ const scrollToBottomFn = (smooth = true) => {
     return () => {
       socketRef.current?.disconnect();
     };
-  }, []);
+  }, [apiUrl, router]);
   const time = new Date().toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
@@ -141,7 +153,7 @@ const scrollToBottomFn = (smooth = true) => {
         const res = await fetch(`${apiUrl}/chat/history/${userId}/${user.id}`);
         const data = await res.json();
   
-        const formattedMessages = (data.messages || []).map((msg: any) => {
+        const formattedMessages = (data.messages as ChatMessage[] || []).map((msg) => {
           return msg.sender_id === userId
             ? `You: ${msg.message}`
             : `${user.username}: ${msg.message}`;
