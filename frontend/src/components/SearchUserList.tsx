@@ -10,7 +10,7 @@ interface User {
 }
 
 interface Props {
-  onUserSelect: (chatId: number, user: any) => void;
+  onUserSelect: (chatId: number, user: User) => void;
   collapsed: boolean;
 }
 

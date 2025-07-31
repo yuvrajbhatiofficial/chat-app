@@ -216,6 +216,7 @@ const scrollToBottomFn = (smooth = true) => {
           <h1 className="text-2xl font-bold">
             {selectedUser ? `${selectedUser.username}` : "Select a user to chat"}
           </h1>
+          <span className="hidden">{username}</span>
           </div>
         </div>
   
