@@ -32,6 +32,7 @@ export default function Home() {
   const [userId, setUserId] = useState<number | null>(null);
   const [scrollToBottom,setScrollToBottom] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const [onlineUserIds, setOnlineUserIds] = useState<number[]>([]);
   const CurrentTime = new Date().toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
@@ -147,7 +148,19 @@ const scrollToBottomFn = (smooth = true) => {
     }
   };
 
+  // online status indicator
 
+  useEffect(() => {
+    if (!token) return;
+  
+    socket.on("online_users", (userIds: number[]) => {
+      setOnlineUserIds(userIds);
+    });
+  
+    return () => {
+      socket.off("online_users");
+    };
+  }, [token]);
 
 
 
@@ -156,7 +169,7 @@ const scrollToBottomFn = (smooth = true) => {
   return (
     <div className="flex h-screen overflow-hidden">
      <div className={`md:flex ${selectedUser ? 'hidden' : 'flex'} w-full md:w-auto`} >
-     <SideNavbar token={token} onUserSelect={handleUserSelect} />
+     <SideNavbar token={token} onUserSelect={handleUserSelect} onlineUserIds={onlineUserIds}/>
      </div>
      
   

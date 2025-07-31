@@ -4,9 +4,10 @@ interface Props {
   token: string | null; // The user's auth token
   onUserSelect: (chatId: number, user: any) => void; // Callback to notify parent when a user is selected
   collapsed: boolean;
+  onlineUserIds: number[];
 }
 
-export default function UserListSidebar({ token, onUserSelect, collapsed }: Props) {
+export default function UserListSidebar({ token, onUserSelect, collapsed ,onlineUserIds}: Props) {
   if (collapsed) return null;
   const [connectedUsers, setConnectedUsers] = useState<any[]>([]); // List of users with active chats
 
@@ -47,7 +48,10 @@ export default function UserListSidebar({ token, onUserSelect, collapsed }: Prop
             onClick={() => onUserSelect(user.id, user)}
             className=" cursor-pointer text-lg md:text-xl hover:bg-gray-100 hover:text-black px-4 py-4 border-b border-gray-200 dark:border-gray-900"
           >
-            {user.username}
+            <span>{user.username}</span>
+      {onlineUserIds.includes(user.id) && (
+        <span className="text-green-500 text-xs ml-2">●</span>
+      )}
           </li>
         ))}
       </ul>

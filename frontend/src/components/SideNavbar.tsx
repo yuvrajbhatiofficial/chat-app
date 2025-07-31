@@ -9,16 +9,17 @@ import UserSetting from './UserSetting';
 interface Props {
   token: string | null;
   onUserSelect: (chatId: number, user: any) => void;
+  onlineUserIds: number[];
 }
 
-export default function SideNavbar({ token, onUserSelect }: Props) {
+export default function SideNavbar({ token, onUserSelect, onlineUserIds }: Props) {
   const [activeTab, setActiveTab] = useState<'chats' | 'search' | 'setting'>('chats');
   const [collapsed, setCollapsed] = useState(false);
 
   return (
     <div className="flex h-screen w-full md:w-auto">
       {/* Vertical Icon Bar */}
-      <div
+     <div
   className={`
     flex md:flex-col 
     md:static fixed bottom-0 left-0 right-0 w-full
@@ -28,7 +29,7 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
     bg-white text-black dark:bg-gray-900 dark:text-white
     p-2 md:py-4 space-y-0 md:space-y-4
     z-50
-  ` }
+  `}
 >
 
        {/* MenuBurger */}
@@ -81,7 +82,7 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
         {/* Content */}
         <div className="flex-1 overflow-y-auto border-r dark:border-gray-600 border-gray-100">
           {activeTab === 'chats' && (
-            <UserListSidebar token={token} onUserSelect={onUserSelect} collapsed={collapsed}/>
+            <UserListSidebar token={token} onUserSelect={onUserSelect} collapsed={collapsed} onlineUserIds={onlineUserIds}/>
           )}
           {activeTab === 'search' && (
             <SearchUserList onUserSelect={onUserSelect} collapsed={collapsed} />

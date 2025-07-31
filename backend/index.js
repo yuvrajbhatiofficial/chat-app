@@ -14,6 +14,7 @@ const initializeChatsDB = require("./initChatDB");
 const chatsDb = require('./chatsDb');
 const searchRouter = require('./routes/search');
 
+
 const app = express();
 const server = http.createServer(app);
 
@@ -74,8 +75,10 @@ const onlineUsers = new Map();
 io.on("connection", (socket) => {
   const user = socket.user;
   console.log("✅ Authenticated user connected:", user.email);
-
+  
   onlineUsers.set(user.id, socket);
+  
+  io.emit("online_users", Array.from(onlineUsers.keys()));
 
   // 🔥 Updated: Save to DB + Send to receiver
   socket.on("send_private_message", ({ toUserId, message }) => {
