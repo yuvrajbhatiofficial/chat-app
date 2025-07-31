@@ -28,7 +28,7 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
     bg-white text-black dark:bg-gray-900 dark:text-white
     p-2 md:py-4 space-y-0 md:space-y-4
     z-50
-  `}
+  ` }
 >
 
        {/* MenuBurger */}
