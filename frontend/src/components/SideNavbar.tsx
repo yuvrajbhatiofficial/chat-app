@@ -16,16 +16,25 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen w-full md:w-auto">
       {/* Vertical Icon Bar */}
       <div
-        className={` transition-all duration-300 bg-white text-black dark:bg-gray-900 dark:text-white flex flex-col p-2 py-4 space-y-4`}
-      >
-       
+  className={`
+    flex md:flex-col 
+    md:static fixed bottom-0 left-0 right-0 w-full
+    md:w-auto
+    items-center justify-around md:items-start md:justify-start
+    transition-all duration-300
+    bg-white text-black dark:bg-gray-900 dark:text-white
+    p-2 md:py-4 space-y-0 md:space-y-4
+    z-50
+  `}
+>
+
        {/* MenuBurger */}
        <button  
           onClick={() => setCollapsed(!collapsed)}
-          className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 `}
+          className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 hidden ${!collapsed &&  'md:block'} `}
         >
           <FiMenu size={24} />
         </button>
@@ -61,7 +70,7 @@ export default function SideNavbar({ token, onUserSelect }: Props) {
 
       {/* Right Sidebar */}
       {!collapsed && (
-        <div className="w-64  bg-white dark:bg-gray-800 dark:text-white shadow  flex flex-col">
+        <div className="md:w-64 w-full  bg-white dark:bg-gray-800 dark:text-white shadow  flex flex-col">
           {/* Topbar */}
         <div className="p-4    text-xl font-bold bg-white border-r border-b-2 border-gray-100  dark:bg-gray-700 dark:border-gray-600">
           {activeTab === 'chats' && 'Chats'}

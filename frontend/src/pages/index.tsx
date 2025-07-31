@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { io, Socket } from "socket.io-client";
-import UserListSidebar from "@/components/UserListSidebar";
+// import UserListSidebar from "@/components/UserListSidebar";
 import jwt_decode from "jwt-decode";
-import SearchUserList from "@/components/SearchUserList";
+// import SearchUserList from "@/components/SearchUserList";
 import SideNavbar from "@/components/SideNavbar";
-import { FiSend } from "react-icons/fi";
+import { FiSend, FiChevronLeft } from "react-icons/fi";
 
 
 let socket: Socket;
@@ -155,17 +155,32 @@ const scrollToBottomFn = (smooth = true) => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <SideNavbar token={token} onUserSelect={handleUserSelect} />
+     <div className={`md:flex ${selectedUser ? 'hidden' : 'flex'} w-full md:w-auto`} >
+     <SideNavbar token={token} onUserSelect={handleUserSelect} />
+     </div>
+     
   
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className={`flex-1 flex flex-col bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 ${!selectedUser ? 'hidden md:flex' : 'flex'}`}>
 
 
         {/* Top bar */}
         <div className="flex justify-between items-center dark:bg-gray-700 bg-white w-full p-3.5 border-b dark:border-gray-600 border-gray-100 z-10">
+          <div className="flex items-center gap-2">
+            {/* backed icon  */}
+            {selectedUser && (
+              <button className="md:hidden p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
+              onClick={ () => setSelectedUser(null)}
+              >
+                <FiChevronLeft size={30}/>
+                </button>
+            )}
+
+
           <h1 className="text-2xl font-bold">
             {selectedUser ? `${selectedUser.username}` : "Select a user to chat"}
           </h1>
+          </div>
         </div>
   
         {/* Chat content area */}

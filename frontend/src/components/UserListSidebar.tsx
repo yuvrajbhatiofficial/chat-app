@@ -35,7 +35,7 @@ export default function UserListSidebar({ token, onUserSelect, collapsed }: Prop
   return (
     <div
     className={`transition-all duration-300 ${
-      collapsed ? 'hidden' : 'w-64'
+      collapsed ? 'hidden' : 'md:w-64 w-full'
     }  h-full overflow-y-auto bg-white dark:bg-gray-800 dark:text-white shadow`}
   >
 
@@ -45,7 +45,7 @@ export default function UserListSidebar({ token, onUserSelect, collapsed }: Prop
           <li
             key={user.id}
             onClick={() => onUserSelect(user.id, user)}
-            className="cursor-pointer text-xl hover:bg-gray-100 hover:text-black px-4 py-4 border-b border-gray-200 dark:border-gray-900"
+            className=" cursor-pointer text-lg md:text-xl hover:bg-gray-100 hover:text-black px-4 py-4 border-b border-gray-200 dark:border-gray-900"
           >
             {user.username}
           </li>
