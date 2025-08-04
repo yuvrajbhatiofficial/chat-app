@@ -206,7 +206,7 @@ const scrollToBottomFn = (smooth = true) => {
 
       {/* Main Chat Area */}
       <div
-        className={`flex-1 flex flex-col bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 ${
+        className={`flex-1 flex flex-col h-screen bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 ${
           !selectedUser ? "hidden md:flex" : "flex"
         }`}
       >
@@ -276,18 +276,20 @@ const scrollToBottomFn = (smooth = true) => {
             </div>
 
             {/* Input box fixed at bottom */}
+            <div className=" p-1 bg-white dark:bg-gray-700 rounded-xl mb-10 md:mb-0 ">
+
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 sendMessage();
               }}
-              className="flex items-center gap-2 p-2 "
+              className="flex items-center gap-2 p-1  "
             >
               <input
                 type="text"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="flex-1 dark:bg-gray-600 dark:border-0 border-gray-200 border-1  bg-gray-100 p-2 rounded"
+                className="flex-1 dark:bg-gray-700 dark:border-0  p-2 rounded-lg text-sm  focus:outline-none "
                 placeholder={
                   selectedUser
                     ? "Type your message..."
@@ -303,6 +305,7 @@ const scrollToBottomFn = (smooth = true) => {
                 <FiSend size={20} />
               </button>
             </form>
+            </div>
           </div>
         </div>
       </div>

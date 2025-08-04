@@ -18,6 +18,16 @@
     --foreground: #ededed;
   }
 }
+html,
+body,
+body > div:first-child,
+div#__next {
+  height: 100%;
+}
+
+html, body {
+  overflow: hidden; /* This is the key to preventing the browser UI from hiding */
+}
 
 body {
   background: var(--background);
