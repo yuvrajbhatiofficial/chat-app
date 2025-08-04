@@ -15,7 +15,7 @@ export default function Login() {
       localStorage.setItem("username", data.username);
       router.push("/"); // go to chat
     } else {
-      alert("Login failed");
+      alert("Login failed do register first or check credentials");
     }
   };
 

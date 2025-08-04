@@ -18,7 +18,7 @@ export default function Register() {
 
       router.push("/"); // go to chat
     } else {
-      alert("Registration failed");
+      alert("Registration failed: username must be unique or email should be correct ");
     }
   };
 

@@ -177,6 +177,7 @@ const scrollToBottomFn = (smooth = true) => {
     const socket = socketRef.current;
   
     socketRef.current.on("online_users", (userIds: number[]) => {
+      console.log("🔄 Online users updated:", userIds);
       setOnlineUserIds(userIds);
     });
   
@@ -191,39 +192,66 @@ const scrollToBottomFn = (smooth = true) => {
 
   return (
     <div className="flex h-screen overflow-hidden">
-     <div className={`md:flex ${selectedUser ? 'hidden' : 'flex'} w-full md:w-auto`} >
-     <SideNavbar token={token} onUserSelect={handleUserSelect} onlineUserIds={onlineUserIds}/>
-     </div>
-     
-  
+      <div
+        className={`md:flex ${
+          selectedUser ? "hidden" : "flex"
+        } w-full md:w-auto`}
+      >
+        <SideNavbar
+          token={token}
+          onUserSelect={handleUserSelect}
+          onlineUserIds={onlineUserIds}
+        />
+      </div>
+
       {/* Main Chat Area */}
-      <div className={`flex-1 flex flex-col bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 ${!selectedUser ? 'hidden md:flex' : 'flex'}`}>
-
-
+      <div
+        className={`flex-1 flex flex-col bg-gradient-to-br from-white via-blue-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 ${
+          !selectedUser ? "hidden md:flex" : "flex"
+        }`}
+      >
         {/* Top bar */}
         <div className="flex justify-between items-center dark:bg-gray-700 bg-white w-full p-3.5 border-b dark:border-gray-600 border-gray-100 z-10">
           <div className="flex items-center gap-2">
             {/* backed icon  */}
             {selectedUser && (
-              <button className="md:hidden p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
-              onClick={ () => setSelectedUser(null)}
+              <button
+                className="md:hidden p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-600"
+                onClick={() => setSelectedUser(null)}
               >
-                <FiChevronLeft size={30}/>
-                </button>
+                <FiChevronLeft size={30} />
+              </button>
             )}
 
-
-          <h1 className="text-2xl font-bold">
-            {selectedUser ? `${selectedUser.username}` : "Select a user to chat"}
-          </h1>
-          <span className="hidden">{username}</span>
+            {selectedUser ? (
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-bold">
+                  {selectedUser.username}
+                </span>
+                <span
+                  className={`w-3 h-3 rounded-full ${
+                    onlineUserIds.includes(selectedUser.id)
+                      ? "bg-green-500"
+                      : "bg-gray-400"
+                  }`}
+                  title={
+                    onlineUserIds.includes(selectedUser.id)
+                      ? "Online"
+                      : "Offline"
+                  }
+                ></span>
+              </div>
+            ) : (
+              <h1 className="text-2xl font-bold">Select a user to chat</h1>
+            )}
+            {/* for eslint error empty use of username */}
+            <span className="hidden">{username}</span>
           </div>
         </div>
-  
+
         {/* Chat content area */}
         <div className="flex-1 flex flex-col p-4  overflow-hidden">
-        <div className="flex flex-col h-full rounded-2xl  backdrop-blur-md">
-
+          <div className="flex flex-col h-full rounded-2xl  backdrop-blur-md">
             {/* Scrollable messages */}
             <div
               id="chat-container"
@@ -231,22 +259,22 @@ const scrollToBottomFn = (smooth = true) => {
             >
               {currentMessages.map((msg, i) => (
                 <div
-                key={i}
-                className={`px-4 py-2 rounded-xl text-base w-fit max-w-xs break-words backdrop-blur-sm ${
-                  msg.startsWith("You:")
-                    ? "bg-blue-500/80 text-white ml-auto  border    dark:bg-white/10 dark:border dark:border-white/30 "
-                    : "bg-gray-200/50 text-gray-900     border border-white  dark:text-white   dark:bg-slate-500/20 dark:border dark:border-white/10"
-                }`}
-              >
-                {msg}
-                <div className="text-[9px] ml-1 opacity-45 text-right mt-1">
-                  ({time})
+                  key={i}
+                  className={`px-4 py-2 rounded-xl text-base w-fit max-w-xs break-words backdrop-blur-sm ${
+                    msg.startsWith("You:")
+                      ? "bg-blue-500/80 text-white ml-auto  border    dark:bg-white/10 dark:border dark:border-white/30 "
+                      : "bg-gray-200/50 text-gray-900     border border-white  dark:text-white   dark:bg-slate-500/20 dark:border dark:border-white/10"
+                  }`}
+                >
+                  {msg}
+                  <div className="text-[9px] ml-1 opacity-45 text-right mt-1">
+                    ({time})
+                  </div>
                 </div>
-              </div>
               ))}
               <div ref={messagesEndRef} />
             </div>
-  
+
             {/* Input box fixed at bottom */}
             <form
               onSubmit={(e) => {
@@ -261,7 +289,9 @@ const scrollToBottomFn = (smooth = true) => {
                 onChange={(e) => setMessage(e.target.value)}
                 className="flex-1 dark:bg-gray-600 dark:border-0 border-gray-200 border-1  bg-gray-100 p-2 rounded"
                 placeholder={
-                  selectedUser ? "Type your message..." : "Select a user first..."
+                  selectedUser
+                    ? "Type your message..."
+                    : "Select a user first..."
                 }
                 disabled={!selectedUser}
               />

@@ -111,6 +111,7 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     console.log("User disconnected:", user.email);
+    io.emit("online_users", Array.from(onlineUsers));
     onlineUsers.delete(user.id);
   });
 });
