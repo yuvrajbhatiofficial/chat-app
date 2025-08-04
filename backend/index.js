@@ -50,7 +50,9 @@ app.get("/protected", authMiddleware, (req, res) => {
 app.get('/', (req, res) => {
   res.send("Server running...");
 });
-
+app.get('/ping',(req,res)=>{
+  res.send('ping for monitoring')
+});
 // Socket.io connection
 
 io.use((socket, next) => {
