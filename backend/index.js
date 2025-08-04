@@ -112,7 +112,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("User disconnected:", user.email);
     onlineUsers.delete(user.id);
-    io.emit("online_users", Array.from(onlineUsers));
+    io.emit("online_users", Array.from(onlineUsers.keys()));
   });
 });
 
