@@ -26,7 +26,8 @@ div#__next {
 }
 
 html, body {
-  overflow: hidden; /* This is the key to preventing the browser UI from hiding */
+  /* overflow: hidden;  */
+  /* This is the key to preventing the browser UI from hiding */
 }
 
 body {
@@ -40,4 +41,9 @@ body {
 #chat-container {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+.scroll-container {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }

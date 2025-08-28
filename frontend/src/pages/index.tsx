@@ -78,7 +78,7 @@ const scrollToBottomFn = (smooth = true) => {
     const savedToken = localStorage.getItem("token");
     const savedUsername = localStorage.getItem("username");
     if (!savedToken) {
-      router.push("/login");
+      router.push("/landingPage");
       return;
       
     }
@@ -142,7 +142,7 @@ const scrollToBottomFn = (smooth = true) => {
   };
 
   
-//userselect thing
+//user select thing
   const handleUserSelect = async (id: number, user: User) => {
     if (!userId) return;
   
